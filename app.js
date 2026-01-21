@@ -46,31 +46,7 @@ function showStatus(message, type) {
   }, 4000);
 }
 
-// 🔹 Cuenta regresiva antes de capturar
-function startCountdown() {
-  return new Promise((resolve) => {
-    let count = 3;
-    countdown.style.display = "block";
 
-    const interval = setInterval(() => {
-      countdown.textContent = count;
-      countdown.style.animation = "none";
-
-      // Reiniciar animación
-      setTimeout(() => {
-        countdown.style.animation = "pulse 1s ease-in-out";
-      }, 10);
-
-      count--;
-
-      if (count < 0) {
-        clearInterval(interval);
-        countdown.style.display = "none";
-        resolve();
-      }
-    }, 1000);
-  });
-}
 
 // 🔹 Efecto flash al capturar
 function triggerFlash() {
@@ -79,13 +55,6 @@ function triggerFlash() {
     flash.classList.remove("active");
   }, 500);
 }
-
-// 🔹 Capturar foto con cuenta regresiva
-captureBtn.addEventListener("click", async () => {
-  captureBtn.disabled = true;
-
-  // Iniciar cuenta regresiva
-  await startCountdown();
 
   // Efecto flash
   triggerFlash();
