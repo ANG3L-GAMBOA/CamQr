@@ -1,26 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>QR Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis 15 Años - Fotocabina</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Prueba con nueva rama</h1>
+    <div class="sparkles" id="sparkles"></div>
 
-    <h2>Tomar Foto</h2>
+    <div class="container">
+      <h1 class="title">Mis 15 Años</h1>
+      <p class="subtitle">✨ Captura este momento especial ✨</p>
 
-    <video id="video" autoplay playsinline></video>
-    <canvas id="canvas" hidden></canvas>
+      <div class="video-container">
+        <video id="video" autoplay playsinline></video>
+        <div class="flash" id="flash"></div>
+        <div class="countdown" id="countdown"></div>
+      </div>
 
-    <button id="capture">📸 Tomar Foto_ Power By _Ang3L_oss</button>
+      <canvas id="canvas"></canvas>
+
+      <button class="btn-capture" id="capture">
+        <span>📸 Tomar Foto</span>
+      </button>
+
+      <div class="status-message" id="status"></div>
+    </div>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    <!-- Tu JS -->
+    <!-- Tu JavaScript -->
     <script src="app.js"></script>
   </body>
 </html>
