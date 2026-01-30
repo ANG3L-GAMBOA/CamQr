@@ -9,19 +9,6 @@ const status = document.getElementById("status");
 let currentFacingMode = "environment"; // Comienza con cámara trasera
 let stream = null;
 
-// 🔹 Configuración de Firebase (REEMPLAZA CON TUS CREDENCIALES)
-const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_DOMINIO",
-  projectId: "TU_ID",
-  storageBucket: "TU_BUCKET",
-};
-
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();
-const db = firebase.firestore();
-
 // 🔹 Iniciar cámara con el modo especificado
 async function startCamera(facingMode = "environment") {
   try {
@@ -80,8 +67,6 @@ function showStatus(message, type) {
   }, 4000);
 }
 
-
-
 // 🔹 Efecto flash al capturar
 function triggerFlash() {
   flash.classList.add("active");
@@ -89,6 +74,10 @@ function triggerFlash() {
     flash.classList.remove("active");
   }, 500);
 }
+
+// 🔹 Capturar foto y descargar
+captureBtn.addEventListener("click", async () => {
+  captureBtn.disabled = true;
 
   // Efecto flash
   triggerFlash();
@@ -110,36 +99,30 @@ function triggerFlash() {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   }
 
-  const imageData = canvas.toDataURL("image/jpeg", 0.95);
-
-  // Subir a Firebase
-  await uploadPhoto(imageData);
+  // Descargar la foto
+  downloadPhoto();
 
   captureBtn.disabled = false;
 });
 
-// 🔹 Subir foto a Firebase Storage y Firestore
-async function uploadPhoto(imageData) {
+// 🔹 Descargar foto capturada
+function downloadPhoto() {
   try {
-    showStatus("📤 Subiendo foto...", "success");
+    showStatus("📥 Descargando foto...", "success");
 
-    const date = new Date().toISOString().split("T")[0];
-    const fileName = `photos/${date}/${Date.now()}.jpg`;
+    // Obtener la imagen del canvas
+    const imageData = canvas.toDataURL("image/jpeg", 0.95);
 
-    const ref = storage.ref(fileName);
-    await ref.putString(imageData, "data_url");
+    // Crear enlace de descarga
+    const link = document.createElement("a");
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    link.download = `Mis15Anos_${timestamp}.jpg`;
+    link.href = imageData;
+    link.click();
 
-    // Guardar metadata en Firestore
-    await db.collection("photos").add({
-      path: fileName,
-      date: date,
-      camera: currentFacingMode, // Guardar qué cámara se usó
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-
-    showStatus("✅ ¡Foto guardada correctamente!", "success");
+    showStatus("✅ ¡Foto descargada correctamente!", "success");
   } catch (err) {
-    showStatus("❌ Error al guardar: " + err.message, "error");
+    showStatus("❌ Error al descargar: " + err.message, "error");
     console.error("Error:", err);
   }
 }
